@@ -1,0 +1,139 @@
+{
+  id: 666002,
+  name: 'GKD个人安全轻量订阅',
+  version: 1,
+  author: 'personal-safe',
+  categories: [
+    { key: 0, name: '开屏广告', enable: true },
+    { key: 1, name: '广告弹窗', enable: false },
+    { key: 2, name: '更新提示', enable: false },
+    { key: 3, name: '权限提示', enable: false },
+  ],
+  globalGroups: [
+    {
+      key: 0,
+      name: '开屏广告-全局',
+      desc: '只点击常见开屏广告的跳过/skip 按钮；排除支付、登录、安装、设置等敏感应用。',
+      enable: true,
+      order: -10,
+      fastQuery: true,
+      matchTime: 10000,
+      actionMaximum: 2,
+      resetMatch: 'app',
+      actionCdKey: 0,
+      actionMaximumKey: 0,
+      priorityTime: 10000,
+      apps: [
+        { id: 'li.songe.gkd', enable: false },
+        { id: 'com.eg.android.AlipayGphone', enable: false },
+        { id: 'com.tencent.mm', enable: false },
+        { id: 'com.tencent.mobileqq', enable: false },
+        { id: 'com.tencent.tim', enable: false },
+        { id: 'com.miui.packageinstaller', enable: false },
+        { id: 'com.android.packageinstaller', enable: false },
+        { id: 'com.google.android.packageinstaller', enable: false },
+        { id: 'com.miui.securitycenter', enable: false },
+        { id: 'com.miui.securitymanager', enable: false },
+        { id: 'com.android.settings', enable: false },
+        { id: 'com.android.permissioncontroller', enable: false },
+        { id: 'com.google.android.permissioncontroller', enable: false },
+        { id: 'com.android.vending', enable: false },
+        { id: 'com.google.android.gms', enable: false },
+      ],
+      rules: [
+        {
+          key: 0,
+          excludeMatches: '([text*="搜索" || text*="历史记录" || text*="设置" || text*="下一步" || text*="完成" || text*="同意" || text*="授权" || text*="支付" || text*="登录" || text*="安装" || text*="继续"][visibleToUser=true])',
+          anyMatches: [
+            '[text*="跳过"][text.length<10][width<500 && height<300][visibleToUser=true]',
+            '[desc*="跳过"][desc.length<10][width<500 && height<300][visibleToUser=true]',
+            '[text~="(?is).*skip.*"][text.length<10][width<500 && height<300][visibleToUser=true]',
+            '[desc~="(?is).*skip.*"][desc.length<10][width<500 && height<300][visibleToUser=true]',
+            '[vid~="(?is).*skip.*"][vid!~="(?is).*video.*"][width<500 && height<300][visibleToUser=true]',
+            '[id$="tt_splash_skip_btn"][visibleToUser=true]',
+          ],
+        },
+      ],
+    },
+  ],
+  apps: [
+    {
+      id: 'com.xingin.xhs',
+      name: '小红书',
+      groups: [
+        {
+          key: 0,
+          name: '开屏广告',
+          enable: true,
+          fastQuery: true,
+          matchTime: 10000,
+          actionMaximum: 1,
+          resetMatch: 'app',
+          rules: [
+            {
+              key: 0,
+              excludeActivityIds: [
+                'com.xingin.alioth.search.GlobalSearchActivity',
+                'com.xingin.growth.ob.FloatingObPageActivity',
+                'com.xingin.matrix.notedetail.NoteDetailActivity',
+              ],
+              matches: '[text*="跳过" || text^="Skip Ad"][text.length<10][visibleToUser=true]',
+            },
+            {
+              key: 1,
+              matches: '[vid="splash_count_down_view"][visibleToUser=true]',
+            },
+          ],
+        },
+      ],
+    },
+    {
+      id: 'com.android.browser',
+      name: '小米浏览器',
+      groups: [
+        {
+          key: 1,
+          name: '分段广告-首页信息流广告',
+          enable: false,
+          fastQuery: true,
+          activityIds: [
+            'com.android.browser.BrowserActivity',
+            'com.android.browser.flow.view.FeedbackDialog',
+          ],
+          rules: [
+            {
+              key: 0,
+              matches: '@[id!=null][desc="负反馈"][visibleToUser=true] -n * > * > [text="广告"]',
+            },
+            {
+              preKeys: [0],
+              key: 1,
+              matches: '@FrameLayout > ViewGroup > [text="不感兴趣"]',
+            },
+          ],
+        },
+      ],
+    },
+    {
+      id: 'com.xiaomi.shop',
+      name: '小米商城',
+      groups: [
+        {
+          key: 1,
+          name: '全屏广告-弹窗广告',
+          enable: false,
+          matchTime: 10000,
+          actionMaximum: 1,
+          resetMatch: 'app',
+          rules: [
+            {
+              key: 0,
+              fastQuery: true,
+              matches: '[desc="关闭" || text="关闭"][visibleToUser=true][width<200 && height<200]',
+            },
+          ],
+        },
+      ],
+    },
+  ],
+}
